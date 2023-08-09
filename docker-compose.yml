@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  master1:
+    image: cluster
+    container_name: master1
+    hostname: master1
+    ports:
+      - 23:22
+    networks:
+      - my_cluster
+
+networks:
+  my_cluster:
