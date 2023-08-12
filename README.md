@@ -1,11 +1,19 @@
-# SSH Connection
+# README
 
-## container ssh ports & password
+## SSH Connection
 
-master1
-port: 23
-password: 1234
+### container ssh ports & password
 
-## connection
+ master1
 
-ssh -p [container ssh port] root@localhost
+ port: 23
+
+ password: 1234
+
+### connection
+
+ ssh -p [container ssh port] root@localhost
+
+## ENV SETTING
+
+run cluster/srcipt/set_env.sh
