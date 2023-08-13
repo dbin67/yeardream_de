@@ -6,19 +6,63 @@ FROM ubuntu:20.04
 RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get -y dist-upgrade
-RUN apt-get install -y vim wget unzip ssh openssh-* net-tools tree
+RUN apt-get install -y vim wget unzip ssh openssh-* net-tools tree sudo
 RUN apt install libsnappy-dev -y
 
 # Java 8 설치
 RUN apt-get install -y openjdk-8-jdk
 
-# Java 환경변수 설정
-RUN JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+# USER 생성
+RUN adduser --disabled-password --gecos '' ubuntu
+RUN echo "ubuntu:1234" | chpasswd
+RUN echo "root:1234" | chpasswd
+RUN adduser ubuntu sudo
+RUN echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# SSH 설정 비밀번호: 1234
-RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
-RUN echo "1234\n1234" | passwd
+# SSH
+USER ubuntu
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+
+USER root
 RUN mkdir -p /run/sshd
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+
+RUN cat /home/ubuntu/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+RUN echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config
+
+RUN cp ~/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys
+RUN chmod 700 ~/.ssh
+RUN chmod 600 ~/.ssh/authorized_keys
+RUN chown ubuntu:ubuntu /home/ubuntu/.ssh
+RUN chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys
+RUN chmod 700 /home/ubuntu/.ssh
+RUN chmod 600 /home/ubuntu/.ssh/authorized_keys
+
+# 환경변수 설정
+USER ubuntu
+RUN echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> ~/.bashrc
+RUN echo 'export HADOOP_HOME=/usr/local/hadoop' >> ~/.bashrc
+RUN echo 'export HADOOP_COMMON_HOME=$HADOOP_HOME' >> ~/.bashrc
+RUN echo 'export HADOOP_HDFS_HOME=$HADOOP_HOME' >> ~/.bashrc
+RUN echo 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop' >> ~/.bashrc
+RUN echo 'export HADOOP_YARN_HOME=$HADOOP_HOME' >> ~/.bashrc
+RUN echo 'export HADOOP_MAPRED_HOME=$HADOOP_HOME' >> ~/.bashrc
+RUN echo 'export SPARK_HOME=/usr/local/spark' >> ~/.bashrc
+RUN echo 'export PYTHONPATH=/usr/bin/python3' >> ~/.bashrc
+RUN echo 'export PYSPARK_PYTHON=/usr/bin/python3' >> ~/.bashrc
+RUN echo 'export ZOOKEEPER_HOME=/usr/local/zookeeper' >> ~/.bashrc
+RUN echo 'export KAFKA_HOME=/usr/local/kafka' >> ~/.bashrc
+RUN echo 'export KAFKA_HEAP_OPTS="-Xmx512m -Xms512m"' >> ~/.bashrc
+RUN echo 'export FLUME_HOME=/usr/local/flume' >> ~/.bashrc
+RUN echo 'export HIVE_HOME=/usr/local/hive' >> ~/.bashrc
+RUN echo 'export ZEPPELIN_HOME=/usr/local/zeppelin' >> ~/.bashrc
+RUN . ~/.bashrc
+
+USER root
 
 EXPOSE 22
 
@@ -65,7 +109,7 @@ RUN ln -s zeppelin-0.10.1-bin-all zeppelin
 RUN ln -s apache-flume-1.11.0-bin flume
 
 # 소유권 변경
-RUN chown -R $USER:$USER /usr/local/
+RUN chown -R ubuntu:ubuntu /usr/local/
 
 # 환경변수 설정
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/spark/bin:/usr/local/spark/sbin:/usr/bin/python3:/usr/local/zookeeper/bin:/usr/local/kafka/bin:/usr/local/hive/bin:/usr/local/zeppelin/bin:/usr/local/flume/bin"
@@ -76,6 +120,7 @@ ENV ZOOKEEPER_HOME="/usr/local/zookeeper"
 ENV KAFKA_HOME="/usr/local/kafka"
 ENV HIVE_HOME="/usr/local/hive"
 ENV ZEPPELIN_HOME="/usr/local/zeppelin"
+ENV FLUME_HOME="/usr/local/flume"
 
 # Hive MySQL Connector
 WORKDIR /downloads
@@ -91,7 +136,7 @@ RUN rm -rf /downloads
 
 # 5. 하둡 설정
 
-RUN mkdir -p ${HADOOP_HOME}/pids
+RUN mkdir -p $HADOOP_HOME/pids
 
 ADD conf/hadoop/ $HADOOP_HOME/etc/hadoop/
 
@@ -119,22 +164,10 @@ ADD conf/zeppelin/ $ZEPPELIN_HOME/conf/
 
 # 10. 플럼 설정
 
-ADD conf/flume/ /usr/local/flume/conf/
-RUN mkdir -p /usr/local/flume/logs
+ADD conf/flume/ $FLUME_HOME/conf/
+RUN mkdir -p $FLUME_HOME/logs
 
 # 11. 하이브 설정
 ADD conf/hive/ $HIVE_HOME/conf/
-
-# USER 생성
-RUN adduser --disabled-password --gecos '' ubuntu
-RUN echo "ubuntu:1234" | chpasswd 
-
-# SSH 키 생성
-RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -t rsa -N "" \
-	&& ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -t ecdsa -N "" \
-	&& ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -t ed25519 -N ""
-
-RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_dsa
-RUN cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 
 CMD ["/usr/sbin/sshd", "-D"]
