@@ -104,4 +104,8 @@ RUN mkdir -p /usr/local/zookeeper/logs
 
 ADD conf/zookeeper/myid $ZOOKEEPER_HOME/data/myid
 
+# 7. 스파크 설정
+
+ADD conf/spark/ $SPARK_HOME/conf/
+
 CMD ["/usr/sbin/sshd", "-D"]
