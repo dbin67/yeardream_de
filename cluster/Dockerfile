@@ -89,4 +89,10 @@ RUN cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib/
 
 RUN rm -rf /downloads
 
+# 4. 하둡 설정
+
+RUN mkdir -p ${HADOOP_HOME}/pids
+
+ADD conf/hadoop/ $HADOOP_HOME/etc/hadoop/
+
 CMD ["/usr/sbin/sshd", "-D"]
