@@ -89,10 +89,19 @@ RUN cp $HADOOP_HOME/share/hadoop/hdfs/lib/guava-27.0-jre.jar $HIVE_HOME/lib/
 
 RUN rm -rf /downloads
 
-# 4. 하둡 설정
+# 5. 하둡 설정
 
 RUN mkdir -p ${HADOOP_HOME}/pids
 
 ADD conf/hadoop/ $HADOOP_HOME/etc/hadoop/
+
+# 6. 주키퍼 설정
+
+ADD conf/zookeeper/zoo.cfg $ZOOKEEPER_HOME/conf/zoo.cfg
+
+RUN mkdir -p /usr/local/zookeeper/data
+RUN mkdir -p /usr/local/zookeeper/logs
+
+ADD conf/zookeeper/myid $ZOOKEEPER_HOME/data/myid
 
 CMD ["/usr/sbin/sshd", "-D"]
