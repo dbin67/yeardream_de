@@ -108,4 +108,9 @@ ADD conf/zookeeper/myid $ZOOKEEPER_HOME/data/myid
 
 ADD conf/spark/ $SPARK_HOME/conf/
 
+# 8. 카프카 설정
+
+ADD conf/kafka/ $KAFKA_HOME/config/
+RUN mkdir -p /usr/local/kafka/logs
+
 CMD ["/usr/sbin/sshd", "-D"]
