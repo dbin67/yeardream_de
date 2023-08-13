@@ -129,4 +129,12 @@ ADD conf/hive/ $HIVE_HOME/conf/
 RUN adduser --disabled-password --gecos '' ubuntu
 RUN echo "ubuntu:1234" | chpasswd 
 
+# SSH 키 생성
+RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -t rsa -N "" \
+	&& ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -t ecdsa -N "" \
+	&& ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -t ed25519 -N ""
+
+RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_dsa
+RUN cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+
 CMD ["/usr/sbin/sshd", "-D"]
