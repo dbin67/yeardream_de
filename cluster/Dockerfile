@@ -114,6 +114,12 @@ ADD conf/kafka/ $KAFKA_HOME/config/
 RUN mkdir -p /usr/local/kafka/logs
 
 # 9. 제플린 설정
+
 ADD conf/zeppelin/ $ZEPPELIN_HOME/conf/
+
+# 10. 플럼 설정
+
+ADD conf/flume/ /usr/local/flume/conf/
+RUN mkdir -p /usr/local/flume/logs
 
 CMD ["/usr/sbin/sshd", "-D"]
