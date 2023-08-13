@@ -122,4 +122,7 @@ ADD conf/zeppelin/ $ZEPPELIN_HOME/conf/
 ADD conf/flume/ /usr/local/flume/conf/
 RUN mkdir -p /usr/local/flume/logs
 
+# 11. 하이브 설정
+ADD conf/hive/ $HIVE_HOME/conf/
+
 CMD ["/usr/sbin/sshd", "-D"]
