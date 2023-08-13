@@ -6,7 +6,52 @@ services:
     container_name: master1
     hostname: master1
     ports:
-      - 23:22
+      - 221:22
+    networks:
+      - my_cluster
+
+  master2:
+    image: cluster
+    container_name: master2
+    hostname: master2
+    ports:
+      - 222:22
+    networks:
+      - my_cluster
+
+  master3:
+    image: cluster
+    container_name: master3
+    hostname: master3
+    ports:
+      - 223:22
+    networks:
+      - my_cluster
+
+  slave1:
+    image: cluster
+    container_name: slave1
+    hostname: slave1
+    ports:
+      - 224:22
+    networks:
+      - my_cluster
+
+  slave2:
+    image: cluster
+    container_name: slave2
+    hostname: slave2
+    ports:
+      - 225:22
+    networks:
+      - my_cluster
+
+  slave3:
+    image: cluster
+    container_name: slave3
+    hostname: slave3
+    ports:
+      - 226:22
     networks:
       - my_cluster
 

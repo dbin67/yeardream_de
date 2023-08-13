@@ -4,15 +4,21 @@
 
 ### container ssh ports & password
 
- master1
+master1
 
- port: 23
+port: 23
 
- password: 1234
+password: 1234
 
 ### connection
 
- ssh -p [container ssh port] root@localhost
+#### root
+
+ssh -p [container ssh port] root@localhost
+
+#### user
+
+ssh -p [container ssh port] ubuntu@localhost
 
 ## ENV SETTING
 
