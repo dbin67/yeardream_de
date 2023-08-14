@@ -8,12 +8,12 @@
     <name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
     <value>org.apache.hadoop.mapred.ShuffleHandler</value>
   </property>
-  <!-- 
+  
   <property>
     <name>yarn.resourcemanager.hostname</name>
     <value>master1</value>
   </property>
-   -->
+  
   <property>
     <name>yarn.nodemanager.vmem-check-enabled</name>
     <value>false</value>

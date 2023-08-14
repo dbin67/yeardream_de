@@ -13,3 +13,11 @@ export HADOOP_OPTS="${HADOOP_OPTS} -Djava.library.path=$HADOOP_HOME/lib/native"
 # hadoop-USER-zkfc.pid (DFSZKFailoverController)
 export HADOOP_PID_DIR=${HADOOP_HOME}/pids
 export HADOOP_SECURE_PID_DIR=${HADOOP_PID_DIR}
+
+export HDFS_NAMENODE_USER=root
+export HDFS_DATANODE_USER=root
+export HDFS_SECONDARYNAMENODE_USER=root
+export YARN_RESOURCEMANAGER_USER=root
+export YARN_NODEMANAGER_USER=root
+export HDFS_JOURNALNODE_USER=root
+export HDFS_ZKFC_USER=root
