@@ -14,8 +14,7 @@ up:
 down:
 	docker-compose down
 
-# Restart all services
-restart:
-	docker-compose restart
+# Refresh Project
+re: down all
 
-.PHONY: build up down restart
+.PHONY: build up down re

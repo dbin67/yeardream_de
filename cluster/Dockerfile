@@ -5,6 +5,7 @@ FROM ubuntu:20.04
 # 라이브러리 설치
 RUN apt-get -y update
 RUN apt-get -y upgrade
+RUN apt update -y
 RUN apt-get -y dist-upgrade
 RUN apt-get install -y vim wget unzip ssh openssh-* net-tools tree sudo
 RUN apt install libsnappy-dev -y
@@ -44,7 +45,7 @@ RUN chmod 600 /home/ubuntu/.ssh/authorized_keys
 
 # 환경변수 설정
 USER ubuntu
-RUN echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> ~/.bashrc
+RUN echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64' >> ~/.bashrc
 RUN echo 'export HADOOP_HOME=/usr/local/hadoop' >> ~/.bashrc
 RUN echo 'export HADOOP_COMMON_HOME=$HADOOP_HOME' >> ~/.bashrc
 RUN echo 'export HADOOP_HDFS_HOME=$HADOOP_HOME' >> ~/.bashrc
@@ -72,7 +73,6 @@ EXPOSE 22
 RUN apt install -y mariadb-client
 
 # Python & PySpark 설치
-RUN apt update -y
 RUN apt install python3.9 -y
 RUN apt install python3-pip -y
 RUN pip3 install pyspark findspark
@@ -112,8 +112,8 @@ RUN ln -s apache-flume-1.11.0-bin flume
 RUN chown -R ubuntu:ubuntu /usr/local/
 
 # 환경변수 설정
-ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/spark/bin:/usr/local/spark/sbin:/usr/bin/python3:/usr/local/zookeeper/bin:/usr/local/kafka/bin:/usr/local/hive/bin:/usr/local/zeppelin/bin:/usr/local/flume/bin"
-ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-openjdk-arm64/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/spark/bin:/usr/local/spark/sbin:/usr/bin/python3:/usr/local/zookeeper/bin:/usr/local/kafka/bin:/usr/local/hive/bin:/usr/local/zeppelin/bin:/usr/local/flume/bin"
+ENV JAVA_HOME="/usr/lib/jvm/java-8-openjdk-arm64"
 ENV HADOOP_HOME="/usr/local/hadoop"
 ENV SPARK_HOME="/usr/local/spark"
 ENV ZOOKEEPER_HOME="/usr/local/zookeeper"
@@ -169,5 +169,9 @@ RUN mkdir -p $FLUME_HOME/logs
 
 # 11. 하이브 설정
 ADD conf/hive/ $HIVE_HOME/conf/
+
+# 스크립트 복사
+ADD scripts /scripts
+RUN chmod -R a+x /scripts
 
 CMD ["/usr/sbin/sshd", "-D"]

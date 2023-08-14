@@ -5,6 +5,7 @@ services:
     image: cluster
     container_name: master1
     hostname: master1
+    command: /scripts/master1.sh
     ports:
       - 221:22
     networks:
@@ -14,6 +15,7 @@ services:
     image: cluster
     container_name: master2
     hostname: master2
+    command: /scripts/master2.sh
     ports:
       - 222:22
     networks:
@@ -23,6 +25,7 @@ services:
     image: cluster
     container_name: master3
     hostname: master3
+    command: /scripts/master3.sh
     ports:
       - 223:22
     networks:
