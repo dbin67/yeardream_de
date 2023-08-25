@@ -57,6 +57,7 @@ services:
     image: cluster
     container_name: slave1
     hostname: slave1
+    command: /scripts/slave1.sh
     ports:
       - 224:22
     networks:
@@ -66,6 +67,7 @@ services:
     image: cluster
     container_name: slave2
     hostname: slave2
+    command: /scripts/slave2.sh
     ports:
       - 225:22
     networks:
@@ -75,6 +77,7 @@ services:
     image: cluster
     container_name: slave3
     hostname: slave3
+    command: /scripts/slave3.sh
     ports:
       - 226:22
     networks:

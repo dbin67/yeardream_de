@@ -18,4 +18,12 @@ mapred --daemon start historyserver
 
 $SPARK_HOME/sbin/start-all.sh
 
+# 17. Kafka 클러스터 설정 및 실행
+
+ssh slave1 "$KAFKA_HOME/bin/kafka-server-start.sh -daemon /usr/local/kafka/config/server.properties"
+
+ssh slave2 "$KAFKA_HOME/bin/kafka-server-start.sh -daemon /usr/local/kafka/config/server.properties"
+
+ssh slave3 "$KAFKA_HOME/bin/kafka-server-start.sh -daemon /usr/local/kafka/config/server.properties"
+
 /usr/sbin/sshd -D
