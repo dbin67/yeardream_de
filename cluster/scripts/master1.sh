@@ -14,4 +14,8 @@ start-dfs.sh
 start-yarn.sh
 mapred --daemon start historyserver
 
+# 16. Spark 클러스터 실행 및 PySpark 예제 실행
+
+$SPARK_HOME/sbin/start-all.sh
+
 /usr/sbin/sshd -D

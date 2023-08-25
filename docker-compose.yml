@@ -6,12 +6,19 @@ services:
     container_name: master1
     hostname: master1
     command: /scripts/master1.sh
+    depends_on:
+      - slave1
+      - slave2
+      - slave3
+      - master2
+      - master3
     ports:
       - 221:22
       - 50070:50070
       - 8088:8088
       - 19888:19888
       - 8042:8042
+      - 18080:18080
     networks:
       - my_cluster
 
@@ -20,12 +27,15 @@ services:
     container_name: master2
     hostname: master2
     command: /scripts/master2.sh
+    depends_on:
+      - master3
     ports:
       - 222:22
       - 50071:50070
       - 8089:8088
       - 19889:19888
       - 8043:8042
+      - 18081:18080
     networks:
       - my_cluster
 
